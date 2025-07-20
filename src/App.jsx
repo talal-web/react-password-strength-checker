@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.jsx
+import React, { useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [password, setPassword] = useState('');
+  const [strength, setStrength] = useState('');
+
+  const checkStrength = (value) => {
+    setPassword(value);
+    const hasLetters = /[a-zA-Z]/.test(value);
+    const hasNumbers = /[0-9]/.test(value);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+    if (value.length < 6) {
+      setStrength('Too short');
+    } else if (hasLetters && hasNumbers && value.length >= 6 && !hasSpecialChars) {
+      setStrength('Weak');
+    } else if (hasLetters && hasNumbers && hasSpecialChars && value.length >= 8) {
+      setStrength('Strong');
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Password Strength Checker</h2>
+      <div className="mb-3">
+        <label htmlFor="passwordInput" className="form-label">Enter Password:</label>
+        <input
+          type="password"
+          className="form-control"
+          id="passwordInput"
+          value={password}
+          onChange={(e) => checkStrength(e.target.value)}
+          placeholder="Enter your password"
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
